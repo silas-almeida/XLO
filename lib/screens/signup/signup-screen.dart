@@ -2,6 +2,7 @@ import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:xlo_mobx2/components/error_box.dart';
 import 'package:xlo_mobx2/screens/signup/components/field_title.dart';
 import 'package:xlo_mobx2/stores/signup_store.dart';
 
@@ -31,12 +32,16 @@ class SignupScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    Observer(
+                      builder:(_) => ErrorBox(message: signupStore.error),
+                    ),  
                     FieldTitle('Apelido', 'Como aparecerá em seus anúncios'),
                     Observer(
                       builder: (_) => TextField(
                         onChanged: signupStore.setName,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
+                          enabled: !signupStore.loading,
                           isDense: true,
                           hintText: 'Exemplo: João da Silva',
                           errorText: signupStore.nameError,
@@ -67,6 +72,7 @@ class SignupScreen extends StatelessWidget {
                     Observer(
                       builder: (_) => TextField(
                         onChanged: signupStore.setPhone,
+                        enabled: !signupStore.loading,
                         decoration: InputDecoration(
                             errorText: signupStore.phoneError,
                             border: OutlineInputBorder(),
@@ -88,9 +94,10 @@ class SignupScreen extends StatelessWidget {
                     Observer(
                       builder: (_) => TextField(
                         onChanged: signupStore.setPass1,
+                        enabled: !signupStore.loading,
                         decoration: InputDecoration(
                           errorText: signupStore.pass1Error,
-                          border: OutlineInputBorder(),
+                          border: const OutlineInputBorder(),
                           isDense: true,
                         ),
                         obscureText: true,
@@ -103,6 +110,7 @@ class SignupScreen extends StatelessWidget {
                     Observer(
                       builder: (_) => TextField(
                         onChanged: signupStore.setPass2,
+                        enabled: !signupStore.loading,
                         decoration: InputDecoration(
                           errorText: signupStore.pass2Error,
                           border: OutlineInputBorder(),
@@ -114,23 +122,43 @@ class SignupScreen extends StatelessWidget {
                     const SizedBox(
                       height: 16,
                     ),
-                    Container(
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                            primary: Colors.orange,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            )),
-                        child: Text('Cadastrar'),
+                    Observer(
+                      builder: (_) => Container(
+                        child: ElevatedButton(
+                          onPressed: signupStore.signupPressed,
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.resolveWith(
+                              (states) {
+                                if (states.contains(MaterialState.disabled)) {
+                                  return Colors.orange.withAlpha(150);
+                                } else {
+                                  return Colors.orange;
+                                }
+                              },
+                            ),
+                            shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                            ),
+                          ),
+                          child: signupStore.loading
+                              ? Transform.scale(
+                                  scale: 0.7,
+                                  child: const CircularProgressIndicator(
+                                    valueColor:
+                                        AlwaysStoppedAnimation(Colors.white),
+                                  ),
+                                )
+                              : Text('Cadastrar'),
+                        ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 8,
                     ),
-                    Divider(),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 8),
+                    const Divider(),
+                     Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
                       child: Wrap(
                         alignment: WrapAlignment.center,
                         children: [
@@ -143,7 +171,7 @@ class SignupScreen extends StatelessWidget {
                           ),
                           GestureDetector(
                             onTap: Navigator.of(context).pop,
-                            child: Text(
+                            child: const Text(
                               'Entrar!',
                               style: TextStyle(
                                   color: Colors.purple,
