@@ -13,7 +13,10 @@ class ErrorBox extends StatelessWidget {
       return Container(
         margin: const EdgeInsets.symmetric(vertical: 8.0),
         padding: const EdgeInsets.all(8.0),
-        color: Colors.red,
+        decoration: BoxDecoration(
+          color: Colors.red,
+          borderRadius: BorderRadius.circular(12.0),
+        ),
         child: Row(
           children: [
             Icon(

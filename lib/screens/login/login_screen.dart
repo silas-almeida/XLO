@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:xlo_mobx2/components/error_box.dart';
 import 'package:xlo_mobx2/screens/signup/signup-screen.dart';
+import 'package:xlo_mobx2/stores/login_store.dart';
 
 class LoginScreen extends StatelessWidget {
+  final LoginStore loginStore = LoginStore();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,6 +38,9 @@ class LoginScreen extends StatelessWidget {
                         color: Colors.grey[900],
                       ),
                     ),
+                    Observer(
+                      builder: (_) => ErrorBox(message: loginStore.error),
+                    ),
                     Padding(
                       padding:
                           const EdgeInsets.only(left: 3, bottom: 4, top: 8.0),
@@ -46,12 +53,17 @@ class LoginScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    TextField(
-                      decoration: InputDecoration(
-                        border: const OutlineInputBorder(),
-                        isDense: true,
+                    Observer(
+                      builder: (_) => TextField(
+                        onChanged: loginStore.setEmail,
+                        enabled: !loginStore.loading,
+                        decoration: InputDecoration(
+                          border: const OutlineInputBorder(),
+                          isDense: true,
+                          errorText: loginStore.emailError,
+                        ),
+                        keyboardType: TextInputType.emailAddress,
                       ),
-                      keyboardType: TextInputType.emailAddress,
                     ),
                     const SizedBox(
                       height: 16,
@@ -85,23 +97,48 @@ class LoginScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    TextField(
-                      decoration: InputDecoration(
-                        border: const OutlineInputBorder(),
-                        isDense: true,
+                    Observer(
+                      builder: (_) => TextField(
+                        enabled: !loginStore.loading,
+                        onChanged: loginStore.setPass,
+                        decoration: InputDecoration(
+                          errorText: loginStore.passwordError,
+                          border: const OutlineInputBorder(),
+                          isDense: true,
+                        ),
+                        obscureText: true,
                       ),
-                      obscureText: true,
                     ),
-                    Container(
-                      margin: const EdgeInsets.symmetric(vertical: 20),
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                            primary: Colors.orange,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            )),
-                        child: Text('Entrar'),
+                    Observer(
+                      builder: (_) => Container(
+                        margin: const EdgeInsets.symmetric(vertical: 20),
+                        child: ElevatedButton(
+                          onPressed: loginStore.loginPressed,
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.resolveWith(
+                              (states) {
+                                if (states.contains(MaterialState.disabled)) {
+                                  return Colors.orange.withAlpha(150);
+                                } else {
+                                  return Colors.orange;
+                                }
+                              },
+                            ),
+                            shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                            ),
+                          ),
+                          child: loginStore.loading
+                              ? Transform.scale(
+                                  scale: 0.7,
+                                  child: CircularProgressIndicator(
+                                    valueColor:
+                                        AlwaysStoppedAnimation(Colors.white),
+                                  ),
+                                )
+                              : Text('Entrar'),
+                        ),
                       ),
                     ),
                     const Divider(

@@ -1,7 +1,9 @@
+import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 import 'package:xlo_mobx2/helpers/extensions.dart';
 import 'package:xlo_mobx2/models/user.dart';
 import 'package:xlo_mobx2/repositories/user_repository.dart';
+import 'package:xlo_mobx2/stores/user_manager_store.dart';
 part 'signup_store.g.dart';
 
 class SignupStore = _SignupStore with _$SignupStore;
@@ -122,7 +124,7 @@ abstract class _SignupStore with Store {
     );
     try {
       final resultUser = await UserRepository().signUp(user);
-      print(resultUser);
+      GetIt.I<UserManagerStore>().setUser(resultUser);
     } catch (e) {
       error = e.toString();
     }
