@@ -2,6 +2,7 @@ import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:xlo_mobx2/components/custom_drawer/custom_drawer.dart';
+import 'package:xlo_mobx2/screens/create/components/category_field.dart';
 import 'package:xlo_mobx2/stores/create_store.dart';
 import 'components/images_field.dart';
 
@@ -56,7 +57,8 @@ class CreateScreen extends StatelessWidget {
                 FilteringTextInputFormatter.digitsOnly,
                 RealInputFormatter(centavos: true),
               ],
-            )
+            ),
+            CategoryField(createStore),
           ],
         ),
       ),
