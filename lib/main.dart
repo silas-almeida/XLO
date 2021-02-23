@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:xlo_mobx2/services/parse_server_services.dart';
 import 'package:xlo_mobx2/stores/category_store.dart';
+import 'package:xlo_mobx2/stores/home_store.dart';
 import 'package:xlo_mobx2/stores/page_store.dart';
 import 'package:xlo_mobx2/stores/user_manager_store.dart';
 
@@ -16,6 +17,7 @@ void main() async {
 
 void setupLocators() {
   GetIt.I.registerSingleton(PageStore());
+  GetIt.I.registerSingleton(HomeStore());
   GetIt.I.registerSingleton(UserManagerStore());
   GetIt.I.registerSingleton(CategoryStore());
 }
