@@ -83,7 +83,9 @@ class ImagesField extends StatelessWidget {
                       padding: const EdgeInsets.fromLTRB(8, 8, 0, 7),
                       child: CircleAvatar(
                         radius: 44,
-                        backgroundImage: FileImage(createStore.images[index]),
+                        backgroundImage: createStore.images[index] is File
+                            ? FileImage(createStore.images[index])
+                            : NetworkImage(createStore.images[index]),
                       ),
                     ),
                   );

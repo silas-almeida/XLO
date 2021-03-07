@@ -24,6 +24,7 @@ class Ad {
         .map((parseFile) => parseFile.url)
         .toList();
     price = object.get<num>(KeyAdPrice);
+    hidePhone = object.get<bool>(KeyAdHidePhone);
     createdAt = object.createdAt;
     address = Address(
       district: object.get<String>(KeyAdDistrict),
@@ -40,13 +41,13 @@ class Ad {
   Ad();
 
   String id;
-  List images;
+  List images = [];
   String title;
   String description;
   Category category;
   Address address;
   num price;
-  bool hidePhone;
+  bool hidePhone = false;
   AdStatus status = AdStatus.PENDING;
   DateTime createdAt;
   User user;

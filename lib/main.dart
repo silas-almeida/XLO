@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:xlo_mobx2/services/parse_server_services.dart';
 import 'package:xlo_mobx2/stores/category_store.dart';
@@ -95,6 +96,14 @@ class MyApp extends StatelessWidget {
             textStyle:
                 MaterialStateProperty.all(TextStyle(color: Colors.black)),
           ))),
+      supportedLocales: const [
+        Locale('pt', 'BR'),
+      ],
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
       home: BaseScreen(),
     );
   }
