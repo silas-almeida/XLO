@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 // import 'package:get_it/get_it.dart';
 import 'package:xlo_mobx2/components/custom_drawer/custom_drawer.dart';
+import 'package:xlo_mobx2/screens/edit_account/edit_account_screen.dart';
 import 'package:xlo_mobx2/screens/myads/my_ads_screen.dart';
 import 'package:xlo_mobx2/stores/user_manager_store.dart';
 // import 'package:xlo_mobx2/stores/user_manager_store.dart';
@@ -34,10 +36,12 @@ class AccountScreen extends StatelessWidget {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text(
-                            GetIt.I<UserManagerStore>().user.name,
-                            style: TextStyle(
-                                fontWeight: FontWeight.w700, fontSize: 22),
+                          Observer(
+                            builder: (_) => Text(
+                              GetIt.I<UserManagerStore>().user.name,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w700, fontSize: 22),
+                            ),
                           ),
                           const SizedBox(
                             height: 4.0,
@@ -62,7 +66,11 @@ class AccountScreen extends StatelessWidget {
                         style: ButtonStyle(
                             overlayColor:
                                 MaterialStateProperty.all(Colors.transparent)),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (_) => EditAccountScreen(),
+                          ));
+                        },
                       ),
                     )
                   ],

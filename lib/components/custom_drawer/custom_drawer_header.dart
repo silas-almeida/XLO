@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:xlo_mobx2/screens/login/login_screen.dart';
 import 'package:xlo_mobx2/stores/page_store.dart';
@@ -39,29 +40,33 @@ class CustomDrawerHeader extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    userManagerStore.isLoggedIn
-                        ? userManagerStore.user.name
-                        : 'Acesse sua conta agora!',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
+                  Observer(
+                    builder: (_) => Text(
+                      userManagerStore.isLoggedIn
+                          ? userManagerStore.user.name
+                          : 'Acesse sua conta agora!',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
                   SizedBox(
                     height: 5,
                   ),
-                  Text(
-                    userManagerStore.isLoggedIn
-                        ? userManagerStore.user.email
-                        : 'Clique aqui!',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
+                  Observer(builder: (_) {
+                    return Text(
+                      userManagerStore.isLoggedIn
+                          ? userManagerStore.user.email ?? 'opa'
+                          : 'Clique aqui!',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    );
+                  }),
                 ],
               ),
             )
